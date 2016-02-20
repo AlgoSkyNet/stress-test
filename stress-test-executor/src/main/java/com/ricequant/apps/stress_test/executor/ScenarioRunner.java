@@ -72,9 +72,10 @@ public class ScenarioRunner {
   private void doStressTest(double unstressedExecutionTime, int numExecutors, int runCount,
           StressTestStatus lastSuccessfulStatus) {
     if (runCount >= iScenario.maxRefineRuns()) {
-      iLogger.info("Scenario <" + iScenario.toString() + "> finished: " + System.lineSeparator() +
-              "\tNumber of strategies ran: " + lastSuccessfulStatus.numExecutors + System.lineSeparator()
-              + "\taverage time taken for each run: " + lastSuccessfulStatus.averageRuntime);
+      iLogger.info("Scenario <" + iScenario.toString() + ">" + System.lineSeparator() + " Finished: " + System
+              .lineSeparator() + "================================" + System.lineSeparator()
+              + "\tNumber of strategies ran: " + lastSuccessfulStatus.numExecutors + System.lineSeparator()
+              + "\taverage time taken for each run: " + lastSuccessfulStatus.averageRuntime + " milliseconds");
 
       iOnFinished.run();
       return;
