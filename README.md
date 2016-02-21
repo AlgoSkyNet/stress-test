@@ -1,16 +1,22 @@
-# Stress Test Client Readme
-This project is only for testing purpose. It consists of a library to start and monitor the status of strategy runs, and a testing tool to do the stress test. The logic will be explained below.
+# Stress Test Client
+This project consists of a library to start and monitor the status of strategy runs, and a testing tool to do the stress test. The logic will be explained below.
 ##Introduction
+The library handles communications at the low level with the Ricequant's Facade, the testing tool calls the library to execute strategies following certain rules to find out the system capacity. As we know the system bottleneck is at the server side, not network or client machine, we made the testing tool to allow only one instance at a time for simplicity.
 ###The Library - Facade Restful Client
 This library communicates with the Ricequant Facade component to start strategy runs and pull feeds periodically. To check the usage, please refer to the stress test executor project.
 ### The Testing Tool - Stress Test Executor
-The whole execution consists of two parts: the initial-speed-test and the stress-test parts. In stress-test part, there are two phases: the expansion phase and the refining phase. Each phase is consisted of several passes, which parameters are adjusted automatically to find out the true capacity of the system.
+This project finds out the capacity of the system defined by: how many of the strategies can be run concurrently with a tolerable performance decay.
+
+>**Example**
+>If we can run strategy in 30 seconds when the system is zero-loaded (no other activities but only running this strategy), by given tolerance factor equals to 2.0, 50 strategies can the system finish within 60 seconds, we say the capacity is 50. The tolerance factor can be configured.
+
+The whole execution consists of two parts: the initial-speed-test and the stress-test. In stress-test part, there are two phases: the expansion phase and the refining phase. Each phase is consisted of several passes, which parameters are adjusted automatically to find out the true capacity of the system.
 
 The executor calls the library in the following way to figure out the system capacity. 
 
  1. Clean up the target environment by stopping all running strategies
  2. Run testing strategy several times and make sure there is only one running instance at a time. Figure out the average elapsed time T<sub>1</sub>
- 3. Run the same strategy of N instances at the same time, record each running time T<sub>n</suB>. If T<sub>n</sub> > T<sub>1</sub> * overtime_tolerance_multiplier, mark overtime, otherwise mark success. overtime_tolerance_multiplier can be configured in range [1, +infinity). So we get number of successful runs N<sub>s</sub>.
+ 3. Run the same strategy of N instances at the same time, record each running time T<sub>n</sub>. If T<sub>n</sub> > T<sub>1</sub> * overtime_tolerance_multiplier, mark overtime, otherwise mark success. overtime_tolerance_multiplier can be configured in range [1, +infinity). So we get number of successful runs N<sub>s</sub>.
  4. N<sub>s</sub>/N > overtime_tolerance, the pass in step 3 is considered passed, increase N to N*expand_grow_factor.
  5. If N<sub>s</sub>/N <= overtime_tolerance, the pass in step 3 is considered failed. It enters refining phase and reduce N to N*refine_shrink_factor.
  6. If step 5 is successful, we increase N to N*refine_grow_factor. Usually refine_grow_factor is smaller than the expand_grow_factor.
