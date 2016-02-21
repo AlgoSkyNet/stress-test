@@ -55,7 +55,7 @@ public class ScenarioRunner {
 
     StrategyPlayer player = StrategyPlayer.create(iScenario.playParams(), iClient);
     player.play(iScenario.timeoutToKillMillis(),
-            SingleStrategySpeedDecider.create(iScenario.numInitialSpeedTestRuns(), resultAcceptor -> {
+            SingleStrategySpeedDecider.getResultAcceptor(iScenario.numInitialSpeedTestRuns(), resultAcceptor -> {
               StrategyPlayer newPlayer = StrategyPlayer.create(iScenario.playParams(), iClient);
               newPlayer.play(iScenario.timeoutToKillMillis(), resultAcceptor);
             }, averageTime -> {
@@ -82,7 +82,7 @@ public class ScenarioRunner {
     }
 
     BiConsumer<String, Long> resultCollector = MultiStrategyResultCollector
-            .create((long) (unstressedExecutionTime * iScenario.overtimeToleranceMultiplier()), numExecutors,
+            .getResultAcceptor((long) (unstressedExecutionTime * iScenario.overtimeToleranceMultiplier()), numExecutors,
                     iScenario.successTolerancePercentage(), (success, time) -> {
                       iLogger.info("Pass finished, number of executors=" + numExecutors);
                       if (success) {

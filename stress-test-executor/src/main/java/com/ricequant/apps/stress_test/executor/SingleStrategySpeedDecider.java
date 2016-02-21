@@ -50,7 +50,7 @@ public class SingleStrategySpeedDecider {
    *
    * @return the result acceptor implements the BiConsumer interface
    */
-  static BiConsumer<String, Long> create(int trialLimit, Consumer<BiConsumer<String, Long>> playNext,
+  static BiConsumer<String, Long> getResultAcceptor(int trialLimit, Consumer<BiConsumer<String, Long>> playNext,
           DoubleConsumer onResolved) {
     return new SingleStrategySpeedDecider(trialLimit, 0, 0, playNext, onResolved).decider;
   }

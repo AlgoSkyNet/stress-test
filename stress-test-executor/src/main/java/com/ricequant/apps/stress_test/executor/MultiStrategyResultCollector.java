@@ -96,8 +96,8 @@ public class MultiStrategyResultCollector {
    *
    * @return the acceptor to be passed into each StrategyPlayer
    */
-  static BiConsumer<String, Long> create(long overtimeThreshold, int numResultsExpected, double lowestNormalRatio,
-          BiConsumer<Boolean, Double> resultAcceptor) {
+  static BiConsumer<String, Long> getResultAcceptor(long overtimeThreshold, int numResultsExpected,
+          double lowestNormalRatio, BiConsumer<Boolean, Double> resultAcceptor) {
     return new MultiStrategyResultCollector(overtimeThreshold, numResultsExpected, lowestNormalRatio,
             resultAcceptor).collector;
   }
