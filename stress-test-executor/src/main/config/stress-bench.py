@@ -1,8 +1,6 @@
 import time
 import numpy as np
-# 可以自己import我们平台支持的第三方python模块，比如pandas、numpy等。
 
-# 在这个方法中编写任何的初始化逻辑。context对象将会在你的算法策略的任何方法之间做传递。
 def init(context):
     context.stocks = index_components('000300.XSHG')[:20]
 
@@ -12,10 +10,8 @@ def init(context):
     context.orders_sent = 0
     context.order_time = 0
     context.np_time = 0
-    # 实时打印日志
-    # logger.info("Interested at stock: " + str(context.stocks))
+    logger.info("Interested at stock: " + str(context.stocks))
 
-# before_trading此函数会在每天交易开始前被调用，当天只会被调用一次
 def before_trading(context, bar_dict):
     per_order = 0
     if context.orders_sent > 0:
@@ -29,7 +25,6 @@ def before_trading(context, bar_dict):
     pass
 
 
-# 你选择的证券的数据更新将会触发此段逻辑，例如日或分钟历史数据切片或者是实时数据切片更新
 def handle_bar(context, bar_dict):
 
     history_start = time.time()

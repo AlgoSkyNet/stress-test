@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<stressTest xmlns="http://www.ricemap.com/services/stress-test"
+<stressTest xmlns="http://www.ricequant.com/generated-config/apps/stress-test"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://www.ricemap.com/services/stress-test facade-client.xsd">
-	<server url="http://192.168.10.200:8081/backend-restful" username="huatai@ricequant.com"
+            xsi:schemaLocation="http://www.ricequant.com/generated-config/apps/stress-test facade-client.xsd">
+	<server url="http://stress.ricequant.com/backend-restful" username="huatai@ricequant.com"
 	        password="V!/>FW9@n'[ks7*W" />
-	<scenarios successTolerancePercentage="1" maxRefineRuns="3">
-		<scenario startDate="20140109" endDate="20140110" numInitialSpeedTestRuns="1" timeoutMillis="300000"
-		          barType="Minute" strategy="src/main/config/empty_loop.py" />
+	<scenarios expandGrowFactor="2" initialParallelRuns="4" overtimeToleranceMultiplier="1.5" refineGrowFactor="1.1"
+	           refineShrinkFactor="0.8" successTolerancePercentage="0.8" maxRefineRuns="5">
+		<scenario enabled="true" title="Scene1" startDate="20140109" endDate="20140110" numInitialSpeedTestRuns="1"
+		          timeoutMillis="300000" barType="Minute" strategy="stress-bench.py" />
 	</scenarios>
 
 </stressTest>
