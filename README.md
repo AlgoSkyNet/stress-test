@@ -10,10 +10,11 @@ The executor calls the library in the following way to figure out the system cap
 
  1. Clean up the target environment by stopping all running strategies
  2. Run testing strategy several times and make sure there is only one running instance at a time. Figure out the average elapsed time T<sub>1</sub>
- 3. Run the same strategy of N instances at the same time, record each running time T<sub>n</suB>. If T<sub>n</sub> > T<sub>1</sub> * tolerance_multiplier, mark overtime, otherwise mark success. tolerance_multipler can be configured in range [1, +infinity). So we get number of successful runs N<sub>s</sub>.
+ 3. Run the same strategy of N instances at the same time, record each running time T<sub>n</suB>. If T<sub>n</sub> > T<sub>1</sub> * overtime_tolerance_multiplier, mark overtime, otherwise mark success. overtime_tolerance_multiplier can be configured in range [1, +infinity). So we get number of successful runs N<sub>s</sub>.
  4. N<sub>s</sub>/N > overtime_tolerance, the pass in step 3 is considered passed, increase N to N*expand_grow_factor.
  5. If N<sub>s</sub>/N <= overtime_tolerance, the pass in step 3 is considered failed. It enters refining phase and reduce N to N*refine_shrink_factor.
  6. If step 5 is successful, we increase N to N*refine_grow_factor. Usually refine_grow_factor is smaller than the expand_grow_factor.
+ 7. Repeating step 5. and 6. until max_refine_runs reached, output statistics of the last successful pass including: how many strategies were run successfully, and the average running time.
 
 All variables can be configured.
 
