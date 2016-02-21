@@ -57,27 +57,27 @@ Sample configuration, can be found in the source code of stress-test-executor pr
 
 ```
 * **stressTest**: the root node, don't change it
-  * **server**: configure endpoint and credentials to connect to the Ricequant Facade
-   --**url**: endpoint for testing, distributed by Ricequant
-   --**username** & **password**: circulated by Ricequant periodically via Email, usually per week
-  * **scenarios**: parent node for all scenarios
-   --**expandGrowFactor**: grow factor in expansion phase
-   --**initialParallelRuns**: the number of runs to begin with in the stress test part
-   --**overtimeToleranceMultiplier**: runs are considered pass if the time elapsed is shorter than this number multiplies the load-free time
-   --**refineGrowFactor**: grow actor in the refining phase
-   --**refineShrinkFactor**: shrink factor in the refining phase
-   --**successTolerancePercentage**: the percentage of number of successful runs during a pass, either in expansion or refining phase. If set to 0.8, it means if 0.8 * N runs are successful, the pass is considered successful
-   --**maxRefineRuns**: how many refine passes to be run to avoid oscillation.
-	   * **scenario**: define strategy parameters for each scenario
-	   --**enabled**: the scenario only runs when enabled is set to true
-	   --**title**: title of the strategy
-	   --**startDate**: start date of the backtest
-	   --**endDate**: end date of the backtest
-		--**timeoutMillis**: the kill time for a strategy. If a strategy runs over this limit, it will be killed from the server side with AbnormalExit, rather than killing from the client side with CancelExit
-	   --**barType**: Minute or Day
+  * **server**: configure endpoint and credentials to connect to the Ricequant Facade<br/>
+   --**url**: endpoint for testing, distributed by Ricequant<br/>
+   --**username** & **password**: circulated by Ricequant periodically via Email, usually per week<br/>
+  * **scenarios**: parent node for all scenarios<br/>
+   --**expandGrowFactor**: grow factor in expansion phase<br/>
+   --**initialParallelRuns**: the number of runs to begin with in the stress test part<br/>
+   --**overtimeToleranceMultiplier**: runs are considered pass if the time elapsed is shorter than this number multiplies the load-free time<br/>
+   --**refineGrowFactor**: grow actor in the refining phase<br/>
+   --**refineShrinkFactor**: shrink factor in the refining phase<br/>
+   --**successTolerancePercentage**: the percentage of number of successful runs during a pass, either in expansion or refining phase. If set to 0.8, it means if 0.8 * N runs are successful, the pass is considered successful<br/>
+   --**maxRefineRuns**: how many refine passes to be run to avoid oscillation.<br/>
+	   * **scenario**: define strategy parameters for each scenario<br/>
+	   --**enabled**: the scenario only runs when enabled is set to true<br/>
+	   --**title**: title of the strategy<br/>
+	   --**startDate**: start date of the backtest<br/>
+	   --**endDate**: end date of the backtest<br/>
+		--**timeoutMillis**: the kill time for a strategy. If a strategy runs over this limit, it will be killed from the server side with AbnormalExit, rather than killing from the client side with CancelExit<br/>
+	   --**barType**: Minute or Day<br/>
 	   --**strategy**: file path relative to the configuration xml, or to the working directory
 	   
 Most of the configuration options are optional, please refer to the xsd file in src/main/resources under stress-test-executor project.
 
 ##Execute
-After ```mvn clean install```, you can find an executable jar under the stress-test-executor project's target directory. It should take the name *stress-test-executor-1.0-SNAPSHOT.jar*. It can be executed with command ```java -jar stress-test-executor-1.0-SNAPSHOT.jar -c stress-test.xml```, where stress-test.xml needs to be written by yourself (or just copy from here). There is a benchmark strategy we have been using for stress testing called "stress-bench.py", which is a minute bar strategy, and it is recommended to use it directly.
+After ```mvn clean install```, you can find an executable jar under the stress-test-executor project's target directory. It should take the name *stress-test-executor-1.0-SNAPSHOT.jar*. It can be executed with command ```java -jar stress-test-executor-1.0-SNAPSHOT.jar -c stress-test.xml```, where stress-test.xml needs to be written by yourself (or just copy from here). There is a benchmark strategy we have been using for stress testing called "stress-bench.py", which is a minute bar strategy, and it is recommended to use it directly. We don't support fundamentals currently in the stress test environment.
