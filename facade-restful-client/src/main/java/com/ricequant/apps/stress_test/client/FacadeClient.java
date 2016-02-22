@@ -187,7 +187,15 @@ public class FacadeClient {
    * Shutdown this client
    */
   public void shutdown() {
-    iHttpClient.close();
+    new Thread(() -> {
+      try {
+        Thread.sleep(1000);
+      }
+      catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      iHttpClient.close();
+    }).start();
   }
 
   private JsonObject authenticatingMessage() {

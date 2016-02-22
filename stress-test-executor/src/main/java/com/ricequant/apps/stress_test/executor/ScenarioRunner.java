@@ -71,14 +71,14 @@ public class ScenarioRunner {
   }
 
   private void doStressTest(double unstressedExecutionTime, int numExecutors, int runCount,
-          StressTestStatus lastSuccessfulStatus) {
+          StressTestStatus bestSuccessfulStatus) {
     if (runCount >= iScenario.maxRefineRuns()) {
       iLogger.info("maxRefineRuns reached, stopping...");
 
       iLogger.info("Scenario <" + iScenario.toString() + ">" + System.lineSeparator() + " Finished: " + System
               .lineSeparator() + "================================" + System.lineSeparator()
-              + "\tNumber of strategies ran: " + lastSuccessfulStatus.numExecutors + System.lineSeparator()
-              + "\taverage time taken for each run: " + lastSuccessfulStatus.averageRuntime + " milliseconds");
+              + "\tNumber of strategies ran: " + bestSuccessfulStatus.numExecutors + System.lineSeparator()
+              + "\taverage time taken for each run: " + bestSuccessfulStatus.averageRuntime + " milliseconds");
 
       iOnFinished.run();
       return;
@@ -90,7 +90,7 @@ public class ScenarioRunner {
                       iLogger.info("Pass finished, number of executors=" + numExecutors);
                       if (success) {
                         int newSize =
-                                (int) (numExecutors * (lastSuccessfulStatus.hasFailedRuns ? iScenario.refineGrowFactor()
+                                (int) (numExecutors * (bestSuccessfulStatus.hasFailedRuns ? iScenario.refineGrowFactor()
                                         : iScenario.expandGrowFactor()));
 
                         if (newSize <= numExecutors + 1)
@@ -99,8 +99,9 @@ public class ScenarioRunner {
                         iLogger.info("Pass success, grow number of executors from " + numExecutors + " to " + newSize
                                 + ". Average time: " + time);
                         // this is an incremental run, does not count
-                        doStressTest(unstressedExecutionTime, newSize, runCount,
-                                StressTestStatus.newStatus(numExecutors, time, lastSuccessfulStatus.hasFailedRuns));
+                        doStressTest(unstressedExecutionTime, newSize, runCount, StressTestStatus
+                                .newStatus(bestSuccessfulStatus, numExecutors, time,
+                                        bestSuccessfulStatus.hasFailedRuns));
                       }
                       else {
                         int newSize = (int) (numExecutors * iScenario.refineShrinkFactor());
@@ -111,7 +112,7 @@ public class ScenarioRunner {
                                 + " for the next pass if there is one. Average time: " + time);
 
                         doStressTest(unstressedExecutionTime, newSize, runCount + 1,
-                                StressTestStatus.newFailedStatus(lastSuccessfulStatus));
+                                StressTestStatus.newFailedStatus(bestSuccessfulStatus));
                       }
                     });
     for (int i = 0; i < numExecutors; i++)
@@ -136,8 +137,17 @@ public class ScenarioRunner {
       return new StressTestStatus(0, 0, false);
     }
 
-    public static StressTestStatus newStatus(int numExecutors, double averageRuntime, boolean hasFailedRuns) {
-      return new StressTestStatus(numExecutors, averageRuntime, hasFailedRuns);
+    public static StressTestStatus newStatus(StressTestStatus bestSuccessfulStatus, int numExecutors,
+            double averageRuntime, boolean hasFailedRuns) {
+      if (bestSuccessfulStatus.numExecutors < numExecutors)
+        return new StressTestStatus(numExecutors, averageRuntime, hasFailedRuns);
+      else if (bestSuccessfulStatus.numExecutors == numExecutors) {
+        if (bestSuccessfulStatus.averageRuntime > averageRuntime)
+          return new StressTestStatus(numExecutors, averageRuntime, hasFailedRuns);
+      }
+
+      return new StressTestStatus(bestSuccessfulStatus.numExecutors, bestSuccessfulStatus.averageRuntime,
+              hasFailedRuns);
     }
 
     public static StressTestStatus newFailedStatus(StressTestStatus status) {

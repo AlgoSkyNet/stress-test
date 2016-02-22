@@ -21,22 +21,8 @@
 			</Policies>
 		</RollingFile>
 
-		<RollingFile name="HammerLogAppender" fileName="${log-folder}/${log-name}-hammer-executor.debug"
-		             filePattern="${log-folder}/${log-name}-hammer-executor-%d{yyyyMMdd}.debug">
-			<PatternLayout>
-				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
-			</PatternLayout>
-			<Policies>
-				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
-			</Policies>
-		</RollingFile>
 	</Appenders>
 	<Loggers>
-		<Logger name="HammerLog" level="debug" additivity="false">
-			<AppenderRef ref="HammerLogAppender" level="DEBUG" />
-		</Logger>
-
-
 		<Root level="debug">
 			<AppenderRef ref="Console" level="INFO" />
 			<AppenderRef ref="rollingFile" level="DEBUG" />
