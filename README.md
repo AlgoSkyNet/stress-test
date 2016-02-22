@@ -172,7 +172,7 @@ The whoe project can be imported as a maven project into IDEs like Intellij IDEA
    --**refineGrowFactor**: 在压测部分的精分阶段如果前一个批次成功，下一个批次的增长系数。在实际压测中，增长的绝对值永远大于等于1<br/>
    --**refineShrinkFactor**: 在压测部分的精分阶段中如果前一个批次失败，下一个批次的收缩系数。在实际压测中，收缩的绝对值永远大于等于2<br/>
    --**successTolerancePercentage**: 在某一批次中成功运行的策略与失败的策略的比值如果大于该数字，则认为批次成功，否则认为失败。<br/>
-   --**maxRefineRuns**: 为避免震荡效应（重复-2, +1, +1, -2, +1 +1的过程），一旦精分阶段的运行批次达到这个数，则停止压测<br/>
+   --**maxRefineRuns**: 为避免震荡效应（重复-2, +1, +1, -2, +1 +1的过程），一旦精分阶段的运行批次总数达到这个数，则停止压测<br/>
 	   * **scenario**: 定义每一场景的属性<br/>
 	   --**enabled**: 当此属行为true时场景被执行，否则被跳过<br/>
 	   --**title**: 策略/场景标题<br/>
