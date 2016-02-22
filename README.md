@@ -38,8 +38,8 @@ Sample configuration, can be found in the source code of stress-test-executor pr
             xsi:schemaLocation="http://www.ricequant.com/generated-config/apps/stress-test facade-client.xsd">
 	
 	<server url="http://stress.ricequant.com/backend-restful" 
-		username="huatai@ricequant.com" 
-		password="V!/>FW9@n'[ks7*W" />
+		username="test@ricequant.com" 
+		password="pass" />
 	
 	<scenarios expandGrowFactor="2" 
 		initialParallelRuns="4" 
@@ -136,8 +136,8 @@ The whoe project can be imported as a maven project into IDEs like Intellij IDEA
             xsi:schemaLocation="http://www.ricequant.com/generated-config/apps/stress-test facade-client.xsd">
 	
 	<server url="http://stress.ricequant.com/backend-restful" 
-		username="huatai@ricequant.com" 
-		password="V!/>FW9@n'[ks7*W" />
+		username="test@ricequant.com" 
+		password="pass" />
 	
 	<scenarios expandGrowFactor="2" 
 		initialParallelRuns="4" 
