@@ -26,8 +26,11 @@ public class FacadeClient {
 
   private final String iPassword;
 
+  private final int iPort;
+
   private FacadeClient(URL url, String username, String password) {
     iHttpClient = Vertx.vertx().createHttpClient();
+    iPort = url.getPort() < 0 ? url.getDefaultPort() : url.getPort();
     iUrl = url;
     iUsername = username;
     iPassword = password;
@@ -61,7 +64,7 @@ public class FacadeClient {
     JsonObject message = authenticatingMessage();
     message.put("command", "play");
     playParams.appendToJsonObject(message);
-    iHttpClient.post(iUrl.getPort(), iUrl.getHost(), iUrl.getPath(), rsp -> rsp.bodyHandler(buffer -> {
+    iHttpClient.post(iPort, iUrl.getHost(), iUrl.getPath(), rsp -> rsp.bodyHandler(buffer -> {
       if (iLogger.isDebugEnabled())
         iLogger.debug("<- " + buffer);
 
@@ -83,7 +86,7 @@ public class FacadeClient {
     message.put("command", "pull");
     message.put("feeds-params", request.toJsonObject());
 
-    iHttpClient.post(iUrl.getPort(), iUrl.getHost(), iUrl.getPath(), rsp -> rsp.bodyHandler(buffer -> {
+    iHttpClient.post(iPort, iUrl.getHost(), iUrl.getPath(), rsp -> rsp.bodyHandler(buffer -> {
       if (iLogger.isDebugEnabled())
         iLogger.debug("<- " + buffer);
 
@@ -145,7 +148,7 @@ public class FacadeClient {
     message.put("run-id", runID);
 
     String messageString = message.toString();
-    iHttpClient.post(iUrl.getPort(), iUrl.getHost(), iUrl.getPath()).end(messageString, "utf-8");
+    iHttpClient.post(iPort, iUrl.getHost(), iUrl.getPath()).end(messageString, "utf-8");
     if (iLogger.isDebugEnabled())
       iLogger.debug("-> " + messageString);
   }
@@ -161,7 +164,7 @@ public class FacadeClient {
     message.put("command", "stop-all");
 
     String messageString = message.toString();
-    iHttpClient.post(iUrl.getPort(), iUrl.getHost(), iUrl.getPath(), rsp -> rsp.bodyHandler(buffer -> {
+    iHttpClient.post(iPort, iUrl.getHost(), iUrl.getPath(), rsp -> rsp.bodyHandler(buffer -> {
       if (iLogger.isDebugEnabled())
         iLogger.debug("<- " + buffer);
 

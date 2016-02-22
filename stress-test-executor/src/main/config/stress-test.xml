@@ -6,7 +6,7 @@
 	        password="V!/>FW9@n'[ks7*W" />
 	<scenarios expandGrowFactor="2" initialParallelRuns="4" overtimeToleranceMultiplier="1.5" refineGrowFactor="1.1"
 	           refineShrinkFactor="0.8" successTolerancePercentage="0.8" maxRefineRuns="5">
-		<scenario enabled="true" title="Scene1" startDate="20140109" endDate="20140110" numInitialSpeedTestRuns="1"
+		<scenario enabled="true" title="Scene1" startDate="20140109" endDate="20140110" numInitialSpeedTestRuns="5"
 		          timeoutMillis="300000" barType="Minute" strategy="stress-bench.py" />
 	</scenarios>
 
