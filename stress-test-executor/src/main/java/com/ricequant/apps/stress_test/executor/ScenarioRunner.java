@@ -61,6 +61,7 @@ public class ScenarioRunner {
             }, averageTime -> {
               if (averageTime < 0) {
                 iLogger.error("Failed to determine the initial speed of the strategy, stop scenario: " + iScenario);
+                iOnFinished.run();
               }
               else {
                 iLogger.info("Single strategy average execution time is: " + averageTime + " milliseconds.");
@@ -72,6 +73,8 @@ public class ScenarioRunner {
   private void doStressTest(double unstressedExecutionTime, int numExecutors, int runCount,
           StressTestStatus lastSuccessfulStatus) {
     if (runCount >= iScenario.maxRefineRuns()) {
+      iLogger.info("maxRefineRuns reached, stopping...");
+
       iLogger.info("Scenario <" + iScenario.toString() + ">" + System.lineSeparator() + " Finished: " + System
               .lineSeparator() + "================================" + System.lineSeparator()
               + "\tNumber of strategies ran: " + lastSuccessfulStatus.numExecutors + System.lineSeparator()
@@ -105,7 +108,7 @@ public class ScenarioRunner {
                           newSize -= 1;
 
                         iLogger.info("Pass failed, shrink number of executors from " + numExecutors + " to " + newSize
-                                + ". Average time: " + time);
+                                + " for the next pass if there is one. Average time: " + time);
 
                         doStressTest(unstressedExecutionTime, newSize, runCount + 1,
                                 StressTestStatus.newFailedStatus(lastSuccessfulStatus));
