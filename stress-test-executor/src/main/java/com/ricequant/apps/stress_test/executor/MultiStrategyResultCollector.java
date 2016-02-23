@@ -68,10 +68,11 @@ public class MultiStrategyResultCollector {
       }
 
       if (ExecutionStatusHelper.isExit(resultStatus)) {
+        iLogger.info("Received results of " + (iResultsReceived.get() + 1) + "-th strategy.");
         if (iNumExpected == iResultsReceived.incrementAndGet()) {
           double numNormals = iResultsReceived.get() - iResultsOvertime.get();
           iResultAcceptor.accept(numNormals / iResultsReceived.get() >= iNormalRatio,
-                  numNormals == 0 ? 0 : iTotalNormalRunTime.get() / numNormals);
+                  numNormals == 0 ? 0 : (double) iTotalNormalRunTime.get() / numNormals);
         }
       }
     }

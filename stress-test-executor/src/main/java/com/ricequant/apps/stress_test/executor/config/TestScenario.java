@@ -22,15 +22,15 @@ public class TestScenario {
 
   private final double iSuccessTolerancePercentage;
 
-  private PlayParams iPlayParams;
+  private final PlayParams iPlayParams;
 
-  private int iTimeoutToKillMillis;
+  private final int iTimeoutToKillMillis;
 
-  private int iNumInitialSpeedTestRuns = 5;
+  private final int iNumInitialSpeedTestRuns;
 
-  private int iInitialParallels;
+  private final int iInitialParallels;
 
-  private double iExpandGrowFactor;
+  private final double iExpandGrowFactor;
 
   private TestScenario(PlayParams params, ScenariosType scenariosXmlConfig, ScenarioType scenarioXmlConfig) {
     iPlayParams = params;
@@ -44,6 +44,7 @@ public class TestScenario {
     iInitialParallels = scenariosXmlConfig.getInitialParallelRuns();
     iMaxRefineRuns = scenariosXmlConfig.getMaxRefineRuns();
     iSuccessTolerancePercentage = scenariosXmlConfig.getSuccessTolerancePercentage();
+    iNumInitialSpeedTestRuns = scenarioXmlConfig.getNumInitialSpeedTestRuns();
   }
 
   public PlayParams playParams() {

@@ -2,6 +2,7 @@ package com.ricequant.apps.stress_test.client;
 
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
+import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public class FacadeClient {
   private final int iPort;
 
   private FacadeClient(URL url, String username, String password) {
-    iHttpClient = Vertx.vertx().createHttpClient();
+    iHttpClient = Vertx.vertx().createHttpClient(new HttpClientOptions().setMaxPoolSize(300));
     iPort = url.getPort() < 0 ? url.getDefaultPort() : url.getPort();
     iUrl = url;
     iUsername = username;
@@ -70,7 +71,11 @@ public class FacadeClient {
 
       JsonObject ret = buffer.toJsonObject();
       resultAcceptor.accept(new PlayResponse(ret));
-    })).end(message.toString(), "utf-8");
+    })).exceptionHandler(e -> {
+      if (iLogger.isDebugEnabled())
+        iLogger.debug("Error sending play command", e);
+      play(playParams, resultAcceptor);
+    }).end(message.toString(), "utf-8");
   }
 
   /**
@@ -133,7 +138,11 @@ public class FacadeClient {
         feeds.riskGrids(FeedsReturn.fromFeeds(results.getJsonArray("risk-grids")));
 
       feedsAcceptor.accept(feeds);
-    })).end(message.toString(), "utf-8");
+    })).exceptionHandler(e -> {
+      if (iLogger.isDebugEnabled())
+        iLogger.debug("Error getting feeds", e);
+      getFeeds(request, feedsAcceptor);
+    }).end(message.toString(), "utf-8");
   }
 
   /**
@@ -148,7 +157,11 @@ public class FacadeClient {
     message.put("run-id", runID);
 
     String messageString = message.toString();
-    iHttpClient.post(iPort, iUrl.getHost(), iUrl.getPath()).end(messageString, "utf-8");
+    iHttpClient.post(iPort, iUrl.getHost(), iUrl.getPath()).exceptionHandler(e -> {
+      if (iLogger.isDebugEnabled())
+        iLogger.debug("Error sending stop strategy command", e);
+      stopStrategy(runID);
+    }).end(messageString, "utf-8");
     if (iLogger.isDebugEnabled())
       iLogger.debug("-> " + messageString);
   }
@@ -178,7 +191,11 @@ public class FacadeClient {
       }
 
       onStopResponse.run();
-    })).end(messageString, "utf-8");
+    })).exceptionHandler(e -> {
+      if (iLogger.isDebugEnabled())
+        iLogger.debug("Error sending stop all strategies command", e);
+      stopAllStrategies(onStopResponse);
+    }).end(messageString, "utf-8");
     if (iLogger.isDebugEnabled())
       iLogger.debug("-> " + messageString);
   }

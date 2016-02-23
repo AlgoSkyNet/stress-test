@@ -134,6 +134,9 @@ public class StrategyPlayer {
         iPlayStats.resultAcceptor.accept("AbnormalExit", System.currentTimeMillis() - iPlayStats.startMillis);
         return;
       }
+      else {
+        iLogger.info("Successfully started strategy with run-id=" + ret.runID());
+      }
 
       GetFeedsRequest req = GetFeedsRequest.create(ret.runID());
       req.portfolios(0, 100);

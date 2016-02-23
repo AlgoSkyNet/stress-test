@@ -72,6 +72,8 @@ public class ScenarioRunner {
 
   private void doStressTest(double unstressedExecutionTime, int numExecutors, int runCount,
           StressTestStatus bestSuccessfulStatus) {
+    iLogger.info("Starting stress test pass with: numExecutors=" + numExecutors);
+
     if (runCount >= iScenario.maxRefineRuns()) {
       iLogger.info("maxRefineRuns reached, stopping...");
 
@@ -99,9 +101,10 @@ public class ScenarioRunner {
                         iLogger.info("Pass success, grow number of executors from " + numExecutors + " to " + newSize
                                 + ". Average time: " + time);
                         // this is an incremental run, does not count
-                        doStressTest(unstressedExecutionTime, newSize, runCount, StressTestStatus
-                                .newStatus(bestSuccessfulStatus, numExecutors, time,
-                                        bestSuccessfulStatus.hasFailedRuns));
+                        doStressTest(unstressedExecutionTime, newSize,
+                                bestSuccessfulStatus.hasFailedRuns ? runCount + 1 : runCount, StressTestStatus
+                                        .newStatus(bestSuccessfulStatus, numExecutors, time,
+                                                bestSuccessfulStatus.hasFailedRuns));
                       }
                       else {
                         int newSize = (int) (numExecutors * iScenario.refineShrinkFactor());
