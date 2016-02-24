@@ -54,6 +54,7 @@ Sample configuration, can be found in the source code of stress-test-executor pr
 			startDate="20140109"
 			endDate="20140110"
 			numInitialSpeedTestRuns="5"
+			theoreticalUpperBound="25"
 			timeoutMillis="300000"
 			barType="Minute"
 			strategy="empty_loop.py" />
@@ -80,6 +81,8 @@ Sample configuration, can be found in the source code of stress-test-executor pr
 	   --**title**: title of the strategy<br/>
 	   --**startDate**: start date of the backtest<br/>
 	   --**endDate**: end date of the backtest<br/>
+	   --**numInitialSpeedTestRuns**: how many times running the strategy in load-free environment to determine the average running time
+	   --**theoreticalUpperBound**: the number of parallel strategies can run bounded by the memory installed on the server. This number is provided by Ricequant, or can be requested when needed.
 		--**timeoutMillis**: the kill time for a strategy. If a strategy runs over this limit, it will be killed from the server side with AbnormalExit, rather than killing from the client side with CancelExit<br/>
 	   --**barType**: Minute or Day<br/>
 	   --**strategy**: file path relative to the configuration xml, or to the working directory
@@ -152,6 +155,7 @@ The whoe project can be imported as a maven project into IDEs like Intellij IDEA
 			startDate="20140109"
 			endDate="20140110"
 			numInitialSpeedTestRuns="5"
+			theoreticalUpperBound="25"
 			timeoutMillis="300000"
 			barType="Minute"
 			strategy="empty_loop.py" />
@@ -178,6 +182,8 @@ The whoe project can be imported as a maven project into IDEs like Intellij IDEA
 	   --**title**: 策略/场景标题<br/>
 	   --**startDate**: 回测开始时间<br/>
 	   --**endDate**: 回测结束时间<br/>
+	   --**numInitialSpeedTestRuns**：测量初速度时运行策略的次数（之后会去平均值）
+	   --**theoreticalUpperBound**：服务器能支撑的并行运行理论上限，由内存决定。这个数字由Ricequant提供或可应邀更改
 		--**timeoutMillis**: 策略硬超时时间。一旦策略运行超过此时间限制，策略将会被强行取消。通常这个时间会设置得较长，取决于策略复杂性。<br/>
 	   --**barType**: 可取"Minute"或"Day"的值来决定回测类型<br/>
 	   --**strategy**: 定义策略代码的路径，可相对于xml配置文件位置，也可相对于进程的工作目录
