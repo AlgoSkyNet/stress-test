@@ -130,7 +130,7 @@ public class StrategyPlayer {
 
     iClient.play(iParams, ret -> {
       if (!ret.isSuccess()) {
-        iLogger.info("Error running strategy: " + ret.reason());
+        iLogger.info("Error running strategy for run-id <" + ret.runID() + ">: " + ret.reason());
         iPlayStats.resultAcceptor.accept("AbnormalExit", System.currentTimeMillis() - iPlayStats.startMillis);
         return;
       }
