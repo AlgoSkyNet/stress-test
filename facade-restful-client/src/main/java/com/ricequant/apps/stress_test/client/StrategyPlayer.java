@@ -36,7 +36,7 @@ public class StrategyPlayer {
 
     iFeedsConsumer = stopNextFetching -> feeds -> {
       if (iLogger.isDebugEnabled())
-        iLogger.debug("Received feeds: " + feeds.toString());
+        iLogger.debug("Received feeds for run-id <" + feeds.runID() + ">: " + feeds.toString());
 
       JsonObject statusJson = feeds.status();
       String lifeCycleStatus = statusJson.getString("LifeCycleStatus");
@@ -54,7 +54,7 @@ public class StrategyPlayer {
         return;
       }
       else if (ExecutionStatusHelper.isError(lifeCycleStatus) || ExecutionStatusHelper.isCanceled(lifeCycleStatus)) {
-        iLogger.info("Execution interrupted due to: " + lifeCycleStatus);
+        iLogger.info("Execution of run-id <" + feeds.runID() + "> interrupted due to: " + lifeCycleStatus);
         notifyResult();
         return;
       }
