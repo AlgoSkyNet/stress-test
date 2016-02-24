@@ -54,6 +54,7 @@
 		<xs:attribute name="barType" type="BarTypeEnum" use="optional" default="Day" />
 		<xs:attribute name="timeoutMillis" type="xs:int" use="required" />
 		<xs:attribute name="numInitialSpeedTestRuns" type="xs:int" use="optional" default="5" />
+		<xs:attribute name="theoreticalUpperBound" type="xs:int" use="optional" default="25" />
 	</xs:complexType>
 
 	<xs:simpleType name="BarTypeEnum">

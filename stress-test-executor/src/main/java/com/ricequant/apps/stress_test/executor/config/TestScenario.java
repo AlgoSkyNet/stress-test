@@ -32,6 +32,8 @@ public class TestScenario {
 
   private final double iExpandGrowFactor;
 
+  private int iTheoreticalUpperBound;
+
   private TestScenario(PlayParams params, ScenariosType scenariosXmlConfig, ScenarioType scenarioXmlConfig) {
     iPlayParams = params;
 
@@ -45,6 +47,7 @@ public class TestScenario {
     iMaxRefineRuns = scenariosXmlConfig.getMaxRefineRuns();
     iSuccessTolerancePercentage = scenariosXmlConfig.getSuccessTolerancePercentage();
     iNumInitialSpeedTestRuns = scenarioXmlConfig.getNumInitialSpeedTestRuns();
+    iTheoreticalUpperBound = scenarioXmlConfig.getTheoreticalUpperBound();
   }
 
   public PlayParams playParams() {
@@ -135,6 +138,16 @@ public class TestScenario {
    */
   public double successTolerancePercentage() {
     return iSuccessTolerancePercentage;
+  }
+
+  /**
+   * The number of strategies can be executed in parallel theoretically, bounded by the total memory installed in the
+   * server. The stress test process should not start parallel strategies more than this number.
+   *
+   * @return the number of strategies can be executed in parallel
+   */
+  public int theoreticalUpperBound() {
+    return iTheoreticalUpperBound;
   }
 
   @Override

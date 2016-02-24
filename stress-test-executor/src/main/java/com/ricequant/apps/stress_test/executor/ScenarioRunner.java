@@ -98,6 +98,9 @@ public class ScenarioRunner {
                         if (newSize <= numExecutors + 1)
                           newSize += 2;
 
+                        if (newSize > iScenario.theoreticalUpperBound())
+                          newSize = iScenario.theoreticalUpperBound();
+
                         iLogger.info("Pass success, grow number of executors from " + numExecutors + " to " + newSize
                                 + ". Average time: " + time);
                         // this is an incremental run, does not count
