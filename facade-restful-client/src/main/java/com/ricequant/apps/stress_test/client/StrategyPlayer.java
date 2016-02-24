@@ -59,6 +59,9 @@ public class StrategyPlayer {
         return;
       }
 
+      if (iExecutor.isShutdown())
+        return;
+
       GetFeedsRequest req = feeds.nextRequest();
 
       if (req.equals(feeds.request()))
@@ -93,7 +96,9 @@ public class StrategyPlayer {
     long time = System.currentTimeMillis();
     if (time - iPlayStats.startMillis > iPlayStats.waitMillis) {
       iLogger.warn("Strategy run-id=" + iPlayStats.runID + " runs over hard deadline, canceling...");
+      iPlayStats.status = "AbnormalExit";
       iClient.stopStrategy(iPlayStats.runID);
+      notifyResult();
       return false;
     }
 
@@ -101,10 +106,11 @@ public class StrategyPlayer {
   }
 
   private void notifyResult() {
+    iExecutor.shutdownNow();
+
     if (iPlayStats.resultAcceptor != null) {
       iPlayStats.resultAcceptor.accept(iPlayStats.status, System.currentTimeMillis() - iPlayStats.startMillis);
     }
-    iExecutor.shutdownNow();
   }
 
   private void scheduleTime() {
