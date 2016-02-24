@@ -73,12 +73,12 @@ public class TestScenario {
   }
 
   /**
-   * Number of parallel strategies to start with
+   * Number of parallel strategies to start with, bounded by TheoreticalUpperBound
    *
    * @return number
    */
   public int initialParallels() {
-    return iInitialParallels;
+    return iInitialParallels < iTheoreticalUpperBound ? iInitialParallels : iTheoreticalUpperBound;
   }
 
   /**
