@@ -41,20 +41,20 @@
 		<xs:attribute name="overtimeToleranceMultiplier" use="optional" type="xs:double" default="1.5" />
 		<xs:attribute name="successTolerancePercentage" use="optional" type="xs:double" default="0.8" />
 		<xs:attribute name="initialParallelRuns" type="xs:int" use="optional" default="4" />
+		<xs:attribute name="theoreticalUpperBound" type="xs:int" use="required" />
 	</xs:complexType>
 
 	<xs:element name="scenario" type="ScenarioType" />
 	<xs:complexType name="ScenarioType">
 		<xs:attribute name="enabled" use="optional" type="xs:boolean" default="true" />
 		<xs:attribute name="strategy" type="xs:string" use="required" />
-		<xs:attribute name="title" type="xs:string" use="optional" default="" />
+		<xs:attribute name="title" type="xs:string" use="required" />
 		<xs:attribute name="initialCash" type="xs:double" use="optional" default="100000" />
 		<xs:attribute name="startDate" type="xs:int" use="optional" default="20140101" />
 		<xs:attribute name="endDate" type="xs:int" use="optional" default="20150101" />
 		<xs:attribute name="barType" type="BarTypeEnum" use="optional" default="Day" />
 		<xs:attribute name="timeoutMillis" type="xs:int" use="required" />
 		<xs:attribute name="numInitialSpeedTestRuns" type="xs:int" use="optional" default="5" />
-		<xs:attribute name="theoreticalUpperBound" type="xs:int" use="optional" default="25" />
 	</xs:complexType>
 
 	<xs:simpleType name="BarTypeEnum">

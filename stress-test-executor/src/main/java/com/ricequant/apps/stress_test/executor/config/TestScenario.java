@@ -32,7 +32,9 @@ public class TestScenario {
 
   private final double iExpandGrowFactor;
 
-  private int iTheoreticalUpperBound;
+  private final int iTheoreticalUpperBound;
+
+  private final String iName;
 
   private TestScenario(PlayParams params, ScenariosType scenariosXmlConfig, ScenarioType scenarioXmlConfig) {
     iPlayParams = params;
@@ -47,7 +49,8 @@ public class TestScenario {
     iMaxRefineRuns = scenariosXmlConfig.getMaxRefineRuns();
     iSuccessTolerancePercentage = scenariosXmlConfig.getSuccessTolerancePercentage();
     iNumInitialSpeedTestRuns = scenarioXmlConfig.getNumInitialSpeedTestRuns();
-    iTheoreticalUpperBound = scenarioXmlConfig.getTheoreticalUpperBound();
+    iTheoreticalUpperBound = scenariosXmlConfig.getTheoreticalUpperBound();
+    iName = scenarioXmlConfig.getTitle();
   }
 
   public PlayParams playParams() {
@@ -150,6 +153,15 @@ public class TestScenario {
     return iTheoreticalUpperBound;
   }
 
+  /**
+   * Name of the scenario who takes the same value of title of the strategy
+   *
+   * @return name of the scenario
+   */
+  public String name() {
+    return iName;
+  }
+
   @Override
   public String toString() {
     JsonObject json = new JsonObject();
@@ -192,4 +204,5 @@ public class TestScenario {
           ScenarioType scenarioXmlConfig) {
     return new TestScenario(params, scenariosXmlConfig, scenarioXmlConfig);
   }
+
 }

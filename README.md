@@ -1,5 +1,5 @@
 # Stress Test Client
-This project consists of a library to start and monitor the status of strategy runs, and a testing tool to do the stress test. The logic will be explained below.
+This project consists of a library to start and monitor the status of strategy runs, and a testing tool to do the stress test. The logic will be explained below. The purpose of this client is to find out that in an acceptable performance degeneration situation, how many concurrent strategy runs can be executed.
 ##Introduction
 The library handles communications at the low level with the Ricequant's Facade, the testing tool calls the library to execute strategies following certain rules to find out the system capacity. As we know the system bottleneck is at the server side, not network or client machine, we made the testing tool to allow only one instance at a time for simplicity.
 ###The Library - Facade Restful Client
@@ -41,7 +41,8 @@ Sample configuration, can be found in the source code of stress-test-executor pr
 		username="test@ricequant.com" 
 		password="pass" />
 	
-	<scenarios expandGrowFactor="2" 
+	<scenarios theoreticalUpperBound="50"
+	    expandGrowFactor="2" 
 		initialParallelRuns="4" 
 		overtimeToleranceMultiplier="2" 
 		refineGrowFactor="1.1" 
@@ -54,7 +55,6 @@ Sample configuration, can be found in the source code of stress-test-executor pr
 			startDate="20140109"
 			endDate="20140110"
 			numInitialSpeedTestRuns="5"
-			theoreticalUpperBound="25"
 			timeoutMillis="300000"
 			barType="Minute"
 			strategy="empty_loop.py" />
@@ -69,6 +69,7 @@ Sample configuration, can be found in the source code of stress-test-executor pr
    --**url**: endpoint for testing, distributed by Ricequant<br/>
    --**username** & **password**: circulated by Ricequant periodically via Email, usually per week<br/>
   * **scenarios**: parent node for all scenarios<br/>
+   --**theoreticalUpperBound**: the number of parallel strategies can run bounded by the memory installed on the server. This number is provided by Ricequant, or can be requested when needed.<br/>
    --**expandGrowFactor**: grow factor in expansion phase<br/>
    --**initialParallelRuns**: the number of runs to begin with in the stress test part<br/>
    --**overtimeToleranceMultiplier**: runs are considered pass if the time elapsed is shorter than this number multiplies the load-free time<br/>
@@ -82,7 +83,6 @@ Sample configuration, can be found in the source code of stress-test-executor pr
 	   --**startDate**: start date of the backtest<br/>
 	   --**endDate**: end date of the backtest<br/>
 	   --**numInitialSpeedTestRuns**: how many times running the strategy in load-free environment to determine the average running time
-	   --**theoreticalUpperBound**: the number of parallel strategies can run bounded by the memory installed on the server. This number is provided by Ricequant, or can be requested when needed.
 		--**timeoutMillis**: the kill time for a strategy. If a strategy runs over this limit, it will be killed from the server side with AbnormalExit, rather than killing from the client side with CancelExit<br/>
 	   --**barType**: Minute or Day<br/>
 	   --**strategy**: file path relative to the configuration xml, or to the working directory
@@ -97,7 +97,7 @@ The whoe project can be imported as a maven project into IDEs like Intellij IDEA
 
 ---------------------
 # Stress Test 客户端
-本客户端包含一个底层连接库和一个压测工具。
+本客户端包含一个底层连接库和一个压测工具。压测时我们主要关注的是策略并行数及性能损失率。目标是要找出在能容忍的性能退化范围内，最多能并行多少个策略运行。
 ##简介
 底层连接库主要用于和Ricequant的Facade前端通过Restful API进行交互，压测工具则管理一些可配置的压测场景来测试系统容量。我们已经发现系统容量的瓶颈在负责策略运行的机器上，所以压测工具中没有提供并行能力。如果需要，可以通过调用底层连接库来实现。
 
@@ -142,7 +142,8 @@ The whoe project can be imported as a maven project into IDEs like Intellij IDEA
 		username="test@ricequant.com" 
 		password="pass" />
 	
-	<scenarios expandGrowFactor="2" 
+	<scenarios theoreticalUpperBound="50"
+	    expandGrowFactor="2" 
 		initialParallelRuns="4" 
 		overtimeToleranceMultiplier="2" 
 		refineGrowFactor="1.1" 
@@ -155,7 +156,6 @@ The whoe project can be imported as a maven project into IDEs like Intellij IDEA
 			startDate="20140109"
 			endDate="20140110"
 			numInitialSpeedTestRuns="5"
-			theoreticalUpperBound="25"
 			timeoutMillis="300000"
 			barType="Minute"
 			strategy="empty_loop.py" />
@@ -170,6 +170,7 @@ The whoe project can be imported as a maven project into IDEs like Intellij IDEA
    --**url**: 由Ricequant指定的测试接口url<br/>
    --**username** & **password**: 由Ricequant分发的用户名和密码，通常每周一次<br/>
   * **scenarios**: 所有场景定义的父节点<br/>
+   --**theoreticalUpperBound**：服务器能支撑的并行运行理论上限，由内存决定。这个数字由Ricequant提供或可应邀更改<br />
    --**expandGrowFactor**: 扩张阶段的增长系数<br/>
    --**initialParallelRuns**: 压测部分增长阶段的第一个批次中的并行数量<br/>
    --**overtimeToleranceMultiplier**: 用这个数乘以初速度来决定在压测部分的性能容忍性（见前面的举例）<br/>
@@ -183,8 +184,7 @@ The whoe project can be imported as a maven project into IDEs like Intellij IDEA
 	   --**startDate**: 回测开始时间<br/>
 	   --**endDate**: 回测结束时间<br/>
 	   --**numInitialSpeedTestRuns**：测量初速度时运行策略的次数（之后会去平均值）
-	   --**theoreticalUpperBound**：服务器能支撑的并行运行理论上限，由内存决定。这个数字由Ricequant提供或可应邀更改
-		--**timeoutMillis**: 策略硬超时时间。一旦策略运行超过此时间限制，策略将会被强行取消。通常这个时间会设置得较长，取决于策略复杂性。<br/>
+		--**timeoutMillis**: 策略硬超时时间。一旦策略运行超过此时间限制，策略将会被强行取消，以应对可能出现的没有响应的意外情况来确保程序执行完毕。通常这个时间会设置得较长。<br/>
 	   --**barType**: 可取"Minute"或"Day"的值来决定回测类型<br/>
 	   --**strategy**: 定义策略代码的路径，可相对于xml配置文件位置，也可相对于进程的工作目录
 	   

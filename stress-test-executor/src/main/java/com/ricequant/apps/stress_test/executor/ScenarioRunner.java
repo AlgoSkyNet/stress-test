@@ -77,10 +77,13 @@ public class ScenarioRunner {
     if (runCount >= iScenario.maxRefineRuns()) {
       iLogger.info("maxRefineRuns reached, stopping...");
 
-      iLogger.info("Scenario <" + iScenario.toString() + ">" + System.lineSeparator() + " Finished: " + System
-              .lineSeparator() + "================================" + System.lineSeparator()
-              + "\tNumber of strategies ran: " + bestSuccessfulStatus.numExecutors + System.lineSeparator()
-              + "\taverage time taken for each run: " + bestSuccessfulStatus.averageRuntime + " milliseconds");
+      if (bestSuccessfulStatus.numExecutors == 0)
+        iLogger.warn("There was no successful pass in this scenario <" + iScenario.name() + ">");
+      else
+        iLogger.info("Scenario <" + iScenario.toString() + ">" + System.lineSeparator() + " Finished: " + System
+                .lineSeparator() + "================================" + System.lineSeparator()
+                + "\tNumber of strategies ran: " + bestSuccessfulStatus.numExecutors + System.lineSeparator()
+                + "\taverage time taken for each run: " + bestSuccessfulStatus.averageRuntime + " milliseconds");
 
       iOnFinished.run();
       return;

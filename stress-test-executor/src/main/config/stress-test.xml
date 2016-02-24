@@ -4,10 +4,11 @@
             xsi:schemaLocation="http://www.ricequant.com/generated-config/apps/stress-test stress-test.xsd">
 	<server url="http://stress.ricequant.com/backend-restful" username="test@ricequant.com"
 	        password="pass" />
-	<scenarios expandGrowFactor="1.5" initialParallelRuns="4" overtimeToleranceMultiplier="2" refineGrowFactor="1.1"
+	<scenarios theoreticalUpperBound="50" expandGrowFactor="1.5" initialParallelRuns="4"
+	           overtimeToleranceMultiplier="2" refineGrowFactor="1.1"
 	           refineShrinkFactor="0.9" successTolerancePercentage="0.8" maxRefineRuns="5">
 		<scenario enabled="true" title="Scene1" startDate="20140109" endDate="20140110" numInitialSpeedTestRuns="5"
-		          timeoutMillis="300000" barType="Minute" strategy="stress-bench.py" theoreticalUpperBound="25" />
+		          timeoutMillis="300000" barType="Minute" strategy="stress-bench.py" />
 	</scenarios>
 
 </stressTest>
