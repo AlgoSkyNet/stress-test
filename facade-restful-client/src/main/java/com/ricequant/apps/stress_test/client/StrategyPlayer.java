@@ -61,9 +61,6 @@ public class StrategyPlayer {
 
       GetFeedsRequest req = feeds.nextRequest();
 
-      if (iLogger.isDebugEnabled())
-        iLogger.debug("-> " + req);
-
       if (req.equals(feeds.request()))
         iExecutor.schedule(() -> iClient.getFeeds(req, iFeedsConsumer.apply(false)), 5, TimeUnit.SECONDS);
       else {
@@ -87,11 +84,15 @@ public class StrategyPlayer {
   }
 
   private boolean checkTime() {
+    if (iLogger.isDebugEnabled())
+      iLogger.debug("Still waiting: " + iPlayStats.runID);
+
     if (iPlayStats.waitMillis == 0)
       return true;
 
     long time = System.currentTimeMillis();
     if (time - iPlayStats.startMillis > iPlayStats.waitMillis) {
+      iLogger.warn("Strategy run-id=" + iPlayStats.runID + " runs over hard deadline, canceling...");
       iClient.stopStrategy(iPlayStats.runID);
       return false;
     }
@@ -129,9 +130,11 @@ public class StrategyPlayer {
     scheduleTime();
 
     iClient.play(iParams, ret -> {
+      iPlayStats.runID = ret.runID();
       if (!ret.isSuccess()) {
         iLogger.info("Error running strategy for run-id <" + ret.runID() + ">: " + ret.reason());
-        iPlayStats.resultAcceptor.accept("AbnormalExit", System.currentTimeMillis() - iPlayStats.startMillis);
+        iPlayStats.status = "AbnormalExit";
+        notifyResult();
         return;
       }
       else {

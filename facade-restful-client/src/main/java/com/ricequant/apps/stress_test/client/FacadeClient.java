@@ -143,6 +143,9 @@ public class FacadeClient {
         iLogger.debug("Error getting feeds", e);
       getFeeds(request, feedsAcceptor);
     }).end(message.toString(), "utf-8");
+
+    if (iLogger.isDebugEnabled())
+      iLogger.debug("-> " + request);
   }
 
   /**

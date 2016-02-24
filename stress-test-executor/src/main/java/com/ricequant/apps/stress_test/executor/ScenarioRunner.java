@@ -102,9 +102,11 @@ public class ScenarioRunner {
                           newSize = iScenario.theoreticalUpperBound();
 
                         if (newSize <= numExecutors) {
-                          iLogger.info("Reached theoretical upper bound and pass success, consider restrict "
+                          iLogger.info("Unable to grow number of executions and pass success, consider restrict "
                                   + "conditions more.");
-                          doStressTest(unstressedExecutionTime, numExecutors, Integer.MAX_VALUE, bestSuccessfulStatus);
+                          doStressTest(unstressedExecutionTime, numExecutors, Integer.MAX_VALUE, StressTestStatus
+                                  .newStatus(bestSuccessfulStatus, numExecutors, time,
+                                          bestSuccessfulStatus.hasFailedRuns));
                           return;
                         }
 
@@ -153,6 +155,10 @@ public class ScenarioRunner {
 
     public static StressTestStatus newStatus(StressTestStatus bestSuccessfulStatus, int numExecutors,
             double averageRuntime, boolean hasFailedRuns) {
+
+      if (bestSuccessfulStatus.averageRuntime == 0)
+        return new StressTestStatus(numExecutors, averageRuntime, hasFailedRuns);
+
       if (bestSuccessfulStatus.numExecutors < numExecutors)
         return new StressTestStatus(numExecutors, averageRuntime, hasFailedRuns);
       else if (bestSuccessfulStatus.numExecutors == numExecutors) {

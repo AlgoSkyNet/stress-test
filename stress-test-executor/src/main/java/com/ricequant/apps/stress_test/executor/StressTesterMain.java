@@ -49,6 +49,7 @@ public class StressTesterMain {
     TestScenario scenario = scenarios.poll();
     if (scenario == null) {
       client.shutdown();
+      System.exit(0);
       return;
     }
     ScenarioRunner runner = ScenarioRunner.create(scenario, client, () -> runNextScenario(scenarios, client));
