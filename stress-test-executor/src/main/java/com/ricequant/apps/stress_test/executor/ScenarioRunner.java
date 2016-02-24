@@ -101,6 +101,14 @@ public class ScenarioRunner {
                         if (newSize > iScenario.theoreticalUpperBound())
                           newSize = iScenario.theoreticalUpperBound();
 
+                        if (newSize <= numExecutors) {
+                          iLogger.info("Reached theoretical upper bound and pass success, consider restrict "
+                                  + "conditions more.");
+                          doStressTest(unstressedExecutionTime, numExecutors, Integer.MAX_VALUE, bestSuccessfulStatus);
+                          return;
+                        }
+
+
                         iLogger.info("Pass success, grow number of executors from " + numExecutors + " to " + newSize
                                 + ". Average time: " + time);
                         // this is an incremental run, does not count
